@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="app.sandoval.com.myminitwitter">
 
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
     <application
         android:name=".common.MyApp"
         android:allowBackup="false"
@@ -12,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.activity.SignUpActivity"></activity>
+        <activity
+            android:name=".ui.activity.DashboardActivity"
+            android:label="@string/title_activity_dashboard"></activity>
+        <activity android:name=".ui.activity.SignUpActivity" />
         <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

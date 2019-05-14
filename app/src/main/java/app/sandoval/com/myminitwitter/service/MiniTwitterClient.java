@@ -8,7 +8,7 @@ import static app.sandoval.com.myminitwitter.common.Constants.API_MINI_TWITTER_B
 public class MiniTwitterClient {
 
     private static MiniTwitterClient instance = null;
-    private MiniTwitterService miniTwitterService;
+    private static MiniTwitterService miniTwitterService;
     private Retrofit retrofit;
 
     public MiniTwitterClient() {
@@ -28,7 +28,7 @@ public class MiniTwitterClient {
         return instance;
     }
 
-    public MiniTwitterService getMiniTwitterService(){
+    public static MiniTwitterService getMiniTwitterService(){
         return miniTwitterService;
     }
 

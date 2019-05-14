@@ -1,5 +1,5 @@
 
-package app.sandoval.com.myminitwitter.model.Response;
+package app.sandoval.com.myminitwitter.data.Response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
