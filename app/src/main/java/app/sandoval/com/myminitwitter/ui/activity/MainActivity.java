@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import app.sandoval.com.myminitwitter.R;
+import app.sandoval.com.myminitwitter.common.SharedPreferencesManager;
 import app.sandoval.com.myminitwitter.data.Request.RequestLogin;
 import app.sandoval.com.myminitwitter.data.Response.ResponseAuth;
 import app.sandoval.com.myminitwitter.service.MiniTwitterClient;
@@ -17,6 +18,13 @@ import app.sandoval.com.myminitwitter.service.MiniTwitterService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static app.sandoval.com.myminitwitter.common.Constants.PREF_ACTIVE;
+import static app.sandoval.com.myminitwitter.common.Constants.PREF_CREATED;
+import static app.sandoval.com.myminitwitter.common.Constants.PREF_EMAIL;
+import static app.sandoval.com.myminitwitter.common.Constants.PREF_PHOTO_URL;
+import static app.sandoval.com.myminitwitter.common.Constants.PREF_TOKEN;
+import static app.sandoval.com.myminitwitter.common.Constants.PREF_USERNAME;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -88,6 +96,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onResponse(Call<ResponseAuth> call, Response<ResponseAuth> response) {
                     if (response.isSuccessful()){
                         Toast.makeText(MainActivity.this, "Correct Login", Toast.LENGTH_LONG).show();
+
+                        SharedPreferencesManager.setStringValue(PREF_TOKEN, response.body() != null ? response.body().getToken() : null);
+                        SharedPreferencesManager.setStringValue(PREF_USERNAME, response.body() != null ? response.body().getUsername() : null);
+                        SharedPreferencesManager.setStringValue(PREF_EMAIL, response.body() != null ? response.body().getEmail() : null);
+                        SharedPreferencesManager.setStringValue(PREF_PHOTO_URL, response.body() != null ? response.body().getPhotoUrl() : null);
+                        SharedPreferencesManager.setStringValue(PREF_CREATED, response.body() != null ? response.body().getCreated() : null);
+                        if (response.body() != null) {
+                            SharedPreferencesManager.setBooleanValue(PREF_ACTIVE, response.body().getActive());
+                        }
+
+
                         Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
                         startActivity(intent);
                         finish();
