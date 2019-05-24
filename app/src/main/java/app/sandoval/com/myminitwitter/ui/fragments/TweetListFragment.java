@@ -21,6 +21,7 @@ import java.util.List;
 import app.sandoval.com.myminitwitter.R;
 import app.sandoval.com.myminitwitter.data.Response.Tweet;
 import app.sandoval.com.myminitwitter.data.viewmodel.TweetViewModel;
+import app.sandoval.com.myminitwitter.ui.adapters.MyTweetRecyclerViewAdapter;
 
 public class TweetListFragment extends Fragment {
 
@@ -76,7 +77,6 @@ public class TweetListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-
 
             adapter = new MyTweetRecyclerViewAdapter(
                     getActivity(),

@@ -1,4 +1,4 @@
-package app.sandoval.com.myminitwitter.service;
+package app.sandoval.com.myminitwitter.service.auth;
 
 import app.sandoval.com.myminitwitter.data.Request.RequestLogin;
 import app.sandoval.com.myminitwitter.data.Request.RequestSignUp;

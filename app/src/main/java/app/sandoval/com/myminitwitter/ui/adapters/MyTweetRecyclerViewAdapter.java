@@ -1,4 +1,4 @@
-package app.sandoval.com.myminitwitter.ui.fragments;
+package app.sandoval.com.myminitwitter.ui.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -20,6 +20,7 @@ import app.sandoval.com.myminitwitter.common.SharedPreferencesManager;
 import app.sandoval.com.myminitwitter.data.Response.Like;
 import app.sandoval.com.myminitwitter.data.Response.Tweet;
 
+import static app.sandoval.com.myminitwitter.common.Constants.API_MINI_TWITTER_FILES_URL;
 import static app.sandoval.com.myminitwitter.common.Constants.PREF_USERNAME;
 
 public class MyTweetRecyclerViewAdapter extends RecyclerView.Adapter<MyTweetRecyclerViewAdapter.ViewHolder> {
@@ -48,16 +49,22 @@ public class MyTweetRecyclerViewAdapter extends RecyclerView.Adapter<MyTweetRecy
 
             holder.mItem = mValues.get(position);
 
-            holder.textViewUserName.setText(holder.mItem.getUser().getUsername());
+            holder.textViewUserName.setText("@"+holder.mItem.getUser().getUsername());
             holder.textViewContentMessage.setText(holder.mItem.getMensaje());
             holder.textViewLikesCount.setText(String.valueOf(holder.mItem.getLikes().size()));
 
             String photo = holder.mItem.getUser().getPhotoUrl();
             if (!photo.equals("")) {
                 Glide.with(ctx)
-                        .load("https://www.minitwitter.com/apiv1/uploads/photos/" + photo)
+                        .load(API_MINI_TWITTER_FILES_URL + photo)
                         .into(holder.imageViewAvatar);
             }
+
+            Glide.with(ctx)
+                    .load(R.drawable.ic_like_border_black_24dp)
+                    .into(holder.imageLike);
+            holder.textViewLikesCount.setTextColor(ctx.getResources().getColor(android.R.color.black));
+            holder.textViewLikesCount.setTypeface(null, Typeface.NORMAL);
 
 
             for (Like like : holder.mItem.getLikes()) {

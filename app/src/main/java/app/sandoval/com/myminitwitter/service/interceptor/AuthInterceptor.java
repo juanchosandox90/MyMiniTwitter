@@ -1,4 +1,4 @@
-package app.sandoval.com.myminitwitter.service;
+package app.sandoval.com.myminitwitter.service.interceptor;
 
 import java.io.IOException;
 
