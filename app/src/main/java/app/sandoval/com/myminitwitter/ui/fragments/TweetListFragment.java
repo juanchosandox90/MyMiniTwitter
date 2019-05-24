@@ -37,10 +37,6 @@ public class TweetListFragment extends Fragment {
     private TweetViewModel tweetViewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public TweetListFragment() {
     }
 
@@ -107,11 +103,25 @@ public class TweetListFragment extends Fragment {
     }
 
     private void loadFavTweetData() {
-        //TODO: Implement fav tweets call
+        tweetViewModel.getFavTweets().observe(getActivity(), new Observer<List<Tweet>>() {
+            @Override
+            public void onChanged(List<Tweet> tweets) {
+                tweetList = tweets;
+                adapter.setData(tweetList);
+            }
+        });
     }
 
     private void loadNewFavTweetData() {
-        //TODO: Implement new fav tweets call
+        tweetViewModel.getNewFavTweets().observe(getActivity(), new Observer<List<Tweet>>() {
+            @Override
+            public void onChanged(List<Tweet> tweets) {
+                tweetList = tweets;
+                swipeRefreshLayout.setRefreshing(false);
+                adapter.setData(tweetList);
+                tweetViewModel.getNewFavTweets().removeObserver(this);
+            }
+        });
     }
 
     private void loadTweetData() {
