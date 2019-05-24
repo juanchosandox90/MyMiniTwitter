@@ -8,6 +8,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static app.sandoval.com.myminitwitter.common.Constants.API_MINI_TWITTER_FILES_URL;
 import static app.sandoval.com.myminitwitter.common.Constants.PREF_PHOTO_URL;
+import static app.sandoval.com.myminitwitter.common.Constants.TWEET_LIST_ALL;
+import static app.sandoval.com.myminitwitter.common.Constants.TWEET_LIST_FAVS;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -31,14 +34,29 @@ public class DashboardActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            Fragment fragment = null;
+
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    return true;
+                    fragment = TweetListFragment.newInstance(TWEET_LIST_ALL);
+                    break;
                 case R.id.navigation_tweets_like:
-                    return true;
+                    fragment = TweetListFragment.newInstance(TWEET_LIST_FAVS);
+                    break;
                 case R.id.navigation_profile:
-                    return true;
+                    break;
             }
+
+            if (fragment!=null){
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .commit();
+
+                return true;
+            }
+
             return false;
         }
     };
@@ -56,8 +74,10 @@ public class DashboardActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
-        getSupportFragmentManager().beginTransaction().
-                add(R.id.fragment_container, new TweetListFragment()).commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, TweetListFragment.newInstance(TWEET_LIST_ALL))
+                .commit();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
