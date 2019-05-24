@@ -2,25 +2,25 @@ package app.sandoval.com.myminitwitter.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+
+import androidx.lifecycle.ViewModelProviders;
 
 import java.util.List;
 
 import app.sandoval.com.myminitwitter.R;
 import app.sandoval.com.myminitwitter.data.Response.Tweet;
-import app.sandoval.com.myminitwitter.service.AuthTwitterClient;
-import app.sandoval.com.myminitwitter.service.AuthTwitterService;
-import app.sandoval.com.myminitwitter.service.MiniTwitterClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import app.sandoval.com.myminitwitter.data.viewmodel.TweetViewModel;
 
 public class TweetListFragment extends Fragment {
 
@@ -31,9 +31,7 @@ public class TweetListFragment extends Fragment {
     private RecyclerView recyclerView;
     private MyTweetRecyclerViewAdapter adapter;
     private List<Tweet> tweetList;
-    private AuthTwitterService authTwitterService;
-    private AuthTwitterClient authTwitterClient;
-
+    private TweetViewModel tweetViewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -59,6 +57,9 @@ public class TweetListFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+        tweetViewModel = ViewModelProviders.of(getActivity())
+                .get(TweetViewModel.class);
     }
 
     @Override
@@ -76,41 +77,26 @@ public class TweetListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            retrofitInit();
+
+            adapter = new MyTweetRecyclerViewAdapter(
+                    getActivity(),
+                    tweetList
+            );
+
+            recyclerView.setAdapter(adapter);
+
             loadTweetData();
         }
         return view;
     }
 
-    private void retrofitInit() {
-        authTwitterClient = AuthTwitterClient.getInstance();
-        authTwitterService = AuthTwitterClient.getAuthTwitterService();
-    }
-
     private void loadTweetData() {
-
-        Call<List<Tweet>> call = authTwitterService.getAllTweets();
-        call.enqueue(new Callback<List<Tweet>>() {
+        tweetViewModel.getAllTweets().observe(getActivity(), new Observer<List<Tweet>>() {
             @Override
-            public void onResponse(Call<List<Tweet>> call, Response<List<Tweet>> response) {
-                if (response.isSuccessful()) {
-                    tweetList = response.body();
-                    adapter = new MyTweetRecyclerViewAdapter(
-                            getActivity(),
-                            tweetList
-                    );
-
-                    recyclerView.setAdapter(adapter);
-                } else {
-                    Toast.makeText(getActivity(), "Something went wrong!", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Tweet>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Connection Error!", Toast.LENGTH_LONG).show();
+            public void onChanged(List<Tweet> tweets) {
+                tweetList = tweets;
+                adapter.setData(tweetList);
             }
         });
-
     }
 }

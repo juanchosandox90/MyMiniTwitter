@@ -1,11 +1,10 @@
 package app.sandoval.com.myminitwitter.ui.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
-import android.support.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import app.sandoval.com.myminitwitter.R;
 import app.sandoval.com.myminitwitter.ui.fragments.TweetListFragment;

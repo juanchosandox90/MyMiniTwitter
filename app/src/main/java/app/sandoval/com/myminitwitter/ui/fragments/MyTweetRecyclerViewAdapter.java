@@ -2,7 +2,9 @@ package app.sandoval.com.myminitwitter.ui.fragments;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import app.sandoval.com.myminitwitter.R;
@@ -25,7 +28,7 @@ public class MyTweetRecyclerViewAdapter extends RecyclerView.Adapter<MyTweetRecy
     private List<Tweet> mValues;
     private String username;
 
-    public MyTweetRecyclerViewAdapter(Context context,List<Tweet> items) {
+    public MyTweetRecyclerViewAdapter(Context context, List<Tweet> items) {
         ctx = context;
         mValues = items;
         username = SharedPreferencesManager.getStringValue(PREF_USERNAME);
@@ -40,36 +43,47 @@ public class MyTweetRecyclerViewAdapter extends RecyclerView.Adapter<MyTweetRecy
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
 
-        holder.textViewUserName.setText(holder.mItem.getUser().getUsername());
-        holder.textViewContentMessage.setText(holder.mItem.getMensaje());
-        holder.textViewLikesCount.setText(String.valueOf(holder.mItem.getLikes().size()));
+        if (mValues != null) {
 
-        String photo =  holder.mItem.getUser().getPhotoUrl();
-        if (!photo.equals("")){
-            Glide.with(ctx)
-                    .load("https://www.minitwitter.com/apiv1/uploads/photos/" +photo)
-                    .into(holder.imageViewAvatar);
-        }
+            holder.mItem = mValues.get(position);
 
+            holder.textViewUserName.setText(holder.mItem.getUser().getUsername());
+            holder.textViewContentMessage.setText(holder.mItem.getMensaje());
+            holder.textViewLikesCount.setText(String.valueOf(holder.mItem.getLikes().size()));
 
-        for (Like like: holder.mItem.getLikes()){
-            if (like.getUsername().equals(username)){
+            String photo = holder.mItem.getUser().getPhotoUrl();
+            if (!photo.equals("")) {
                 Glide.with(ctx)
-                        .load(R.drawable.ic_like_red_24dp)
-                        .into(holder.imageLike);
-                holder.textViewLikesCount.setTextColor(ctx.getResources().getColor(R.color.colorRed));
-                holder.textViewLikesCount.setTypeface(null, Typeface.BOLD);
-                break;
+                        .load("https://www.minitwitter.com/apiv1/uploads/photos/" + photo)
+                        .into(holder.imageViewAvatar);
+            }
+
+
+            for (Like like : holder.mItem.getLikes()) {
+                if (like.getUsername().equals(username)) {
+                    Glide.with(ctx)
+                            .load(R.drawable.ic_like_red_24dp)
+                            .into(holder.imageLike);
+                    holder.textViewLikesCount.setTextColor(ctx.getResources().getColor(R.color.colorRed));
+                    holder.textViewLikesCount.setTypeface(null, Typeface.BOLD);
+                    break;
+                }
             }
         }
 
     }
 
+    public void setData(List<Tweet> tweetList) {
+        this.mValues = tweetList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
-        return mValues.size();
+        if (mValues != null)
+            return mValues.size();
+        else return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
