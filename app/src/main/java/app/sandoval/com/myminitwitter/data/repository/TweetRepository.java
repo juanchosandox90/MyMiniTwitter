@@ -78,4 +78,32 @@ public class TweetRepository {
             }
         });
     }
+
+    public void likeTweet(final int idTweet) {
+        Call<Tweet> call = authTwitterService.likeTweet(idTweet);
+
+        call.enqueue(new Callback<Tweet>() {
+            @Override
+            public void onResponse(Call<Tweet> call, Response<Tweet> response) {
+                if (response.isSuccessful()) {
+                    List<Tweet> clonedList = new ArrayList<>();
+                    for (int i=0; i<allTweets.getValue().size(); i++){
+                        if (allTweets.getValue().get(i).getId() == idTweet){
+                            clonedList.add(response.body());
+                        } else
+                        clonedList.add(new Tweet(allTweets.getValue().get(i)));
+                    }
+
+                    allTweets.setValue(clonedList);
+                } else {
+                    Toast.makeText(MyApp.getContext(), "Something went wrong!", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Tweet> call, Throwable t) {
+                Toast.makeText(MyApp.getContext(), "Connection Error!", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

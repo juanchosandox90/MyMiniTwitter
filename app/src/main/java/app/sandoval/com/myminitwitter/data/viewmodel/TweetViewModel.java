@@ -1,6 +1,7 @@
 package app.sandoval.com.myminitwitter.data.viewmodel;
 
 import android.app.Application;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.annotation.NonNull;
@@ -21,14 +22,20 @@ public class TweetViewModel extends AndroidViewModel {
         allTweets = tweetRepository.getAllTweets();
     }
 
-    public LiveData<List<Tweet>> getAllTweets() { return allTweets;}
+    public LiveData<List<Tweet>> getAllTweets() {
+        return allTweets;
+    }
 
     public LiveData<List<Tweet>> getNewTweets() {
         allTweets = tweetRepository.getAllTweets();
         return allTweets;
     }
 
-    public void createTweet(String tweetMessage){
+    public void createTweet(String tweetMessage) {
         tweetRepository.createTweet(tweetMessage);
+    }
+
+    public void likeTweet(int idTweet) {
+        tweetRepository.likeTweet(idTweet);
     }
 }

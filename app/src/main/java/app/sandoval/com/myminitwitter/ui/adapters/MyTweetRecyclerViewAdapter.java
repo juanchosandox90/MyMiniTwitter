@@ -3,6 +3,8 @@ package app.sandoval.com.myminitwitter.ui.adapters;
 import android.content.Context;
 import android.graphics.Typeface;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import app.sandoval.com.myminitwitter.R;
 import app.sandoval.com.myminitwitter.common.SharedPreferencesManager;
 import app.sandoval.com.myminitwitter.data.Response.Like;
 import app.sandoval.com.myminitwitter.data.Response.Tweet;
+import app.sandoval.com.myminitwitter.data.viewmodel.TweetViewModel;
 
 import static app.sandoval.com.myminitwitter.common.Constants.API_MINI_TWITTER_FILES_URL;
 import static app.sandoval.com.myminitwitter.common.Constants.PREF_USERNAME;
@@ -28,11 +31,13 @@ public class MyTweetRecyclerViewAdapter extends RecyclerView.Adapter<MyTweetRecy
     private Context ctx;
     private List<Tweet> mValues;
     private String username;
+    private TweetViewModel tweetViewModel;
 
     public MyTweetRecyclerViewAdapter(Context context, List<Tweet> items) {
         ctx = context;
         mValues = items;
         username = SharedPreferencesManager.getStringValue(PREF_USERNAME);
+        tweetViewModel = ViewModelProviders.of((FragmentActivity) ctx).get(TweetViewModel.class);
     }
 
     @Override
@@ -66,6 +71,12 @@ public class MyTweetRecyclerViewAdapter extends RecyclerView.Adapter<MyTweetRecy
             holder.textViewLikesCount.setTextColor(ctx.getResources().getColor(android.R.color.black));
             holder.textViewLikesCount.setTypeface(null, Typeface.NORMAL);
 
+            holder.imageLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tweetViewModel.likeTweet(holder.mItem.getId());
+                }
+            });
 
             for (Like like : holder.mItem.getLikes()) {
                 if (like.getUsername().equals(username)) {
