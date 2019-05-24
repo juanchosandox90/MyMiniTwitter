@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import app.sandoval.com.myminitwitter.R;
+import app.sandoval.com.myminitwitter.ui.fragments.TweetListFragment;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -38,6 +39,9 @@ public class DashboardActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+
+        getSupportFragmentManager().beginTransaction().
+                add(R.id.fragment_container, new TweetListFragment()).commit();
 
     }
 
