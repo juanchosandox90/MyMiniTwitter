@@ -11,6 +11,7 @@ import java.util.List;
 import app.sandoval.com.myminitwitter.common.MyApp;
 import app.sandoval.com.myminitwitter.common.SharedPreferencesManager;
 import app.sandoval.com.myminitwitter.data.Request.RequestCreateTweet;
+import app.sandoval.com.myminitwitter.data.Response.DeleteTweetResponse;
 import app.sandoval.com.myminitwitter.data.Response.Like;
 import app.sandoval.com.myminitwitter.data.Response.Tweet;
 import app.sandoval.com.myminitwitter.service.tweets.AuthTwitterClient;
@@ -113,6 +114,34 @@ public class TweetRepository {
         });
     }
 
+    public void deleteTweet(final int idTweet) {
+        Call<DeleteTweetResponse> call = authTwitterService.deleteTweet(idTweet);
+
+        call.enqueue(new Callback<DeleteTweetResponse>() {
+            @Override
+            public void onResponse(Call<DeleteTweetResponse> call, Response<DeleteTweetResponse> response) {
+                if (response.isSuccessful()) {
+                    List<Tweet> clonedList = new ArrayList<>();
+                    for (int i = 0; i < allTweets.getValue().size(); i++) {
+                        if (allTweets.getValue().get(i).getId() != idTweet) {
+                            clonedList.add(new Tweet(allTweets.getValue().get(i)));
+                        }
+                    }
+                    allTweets.setValue(clonedList);
+                    getFavTweets();
+                } else {
+                    Toast.makeText(MyApp.getContext(), "Something went wrong!", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DeleteTweetResponse> call, Throwable t) {
+                Toast.makeText(MyApp.getContext(), "Connection Error!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
     public void likeTweet(final int idTweet) {
         Call<Tweet> call = authTwitterService.likeTweet(idTweet);
 
@@ -142,4 +171,6 @@ public class TweetRepository {
             }
         });
     }
+
+
 }
