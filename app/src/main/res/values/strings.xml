@@ -22,4 +22,5 @@
     <string name="cancel_tweet">Cancel Tweet</string>
     <string name="delete_tweet_button">Delete</string>
     <string name="cancel_tweet_button">Cancel</string>
+    <string name="delete_tweet_title">Delete Tweet</string>
 </resources>

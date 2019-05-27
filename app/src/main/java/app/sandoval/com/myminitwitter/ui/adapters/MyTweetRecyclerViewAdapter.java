@@ -71,6 +71,18 @@ public class MyTweetRecyclerViewAdapter extends RecyclerView.Adapter<MyTweetRecy
             holder.textViewLikesCount.setTextColor(ctx.getResources().getColor(android.R.color.black));
             holder.textViewLikesCount.setTypeface(null, Typeface.NORMAL);
 
+            holder.imageViewShowMenu.setVisibility(View.GONE);
+            if (holder.mItem.getUser().getUsername().equals(username)){
+                holder.imageViewShowMenu.setVisibility(View.VISIBLE);
+            }
+
+            holder.imageViewShowMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tweetViewModel.openTweetDialogMenu(ctx, holder.mItem.getId());
+                }
+            });
+
             holder.imageLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -108,6 +120,7 @@ public class MyTweetRecyclerViewAdapter extends RecyclerView.Adapter<MyTweetRecy
         public final View mView;
         public final ImageView imageViewAvatar;
         public final ImageView imageLike;
+        public final ImageView imageViewShowMenu;
         public final TextView textViewUserName;
         public final TextView textViewContentMessage;
         public final TextView textViewLikesCount;
@@ -118,6 +131,7 @@ public class MyTweetRecyclerViewAdapter extends RecyclerView.Adapter<MyTweetRecy
             mView = view;
             imageViewAvatar = view.findViewById(R.id.imageViewAvatar);
             imageLike = view.findViewById(R.id.imageViewLike);
+            imageViewShowMenu = view.findViewById(R.id.imageViewShowMenu);
             textViewUserName = view.findViewById(R.id.textViewUsername);
             textViewContentMessage = view.findViewById(R.id.textViewContentMessage);
             textViewLikesCount = view.findViewById(R.id.textViewLikeCount);

@@ -1,7 +1,9 @@
 package app.sandoval.com.myminitwitter.data.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import java.util.List;
 
 import app.sandoval.com.myminitwitter.data.Response.Tweet;
 import app.sandoval.com.myminitwitter.data.repository.TweetRepository;
+import app.sandoval.com.myminitwitter.ui.fragments.BottonModalTweetFragment;
 
 public class TweetViewModel extends AndroidViewModel {
 
@@ -21,6 +24,11 @@ public class TweetViewModel extends AndroidViewModel {
         super(application);
         tweetRepository = new TweetRepository();
         allTweets = tweetRepository.getAllTweets();
+    }
+
+    public void openTweetDialogMenu(Context context, int idTweet){
+        BottonModalTweetFragment bottonModalTweetFragment = BottonModalTweetFragment.newInstance(idTweet);
+        bottonModalTweetFragment.show(((AppCompatActivity) context).getSupportFragmentManager(),"BottonModalTweetFragment");
     }
 
     public LiveData<List<Tweet>> getAllTweets() {
